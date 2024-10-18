@@ -1,0 +1,20 @@
+import socket
+
+# Adresse IP et port du serveur
+server_ip = '0.0.0.0'  # Accepte les connexions de toutes les interfaces
+server_port = 12345
+
+# Créer un socket TCP pour écouter les connexions entrantes
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+    server_socket.bind((server_ip, server_port))  # Lier le socket à l'adresse et au port
+    server_socket.listen(1)  # Écouter les connexions entrantes
+    print(f"Serveur en écoute sur {server_ip}:{server_port}...")
+
+    while True:
+        client_socket, client_address = server_socket.accept()  # Accepter la connexion d'un client
+        with client_socket:
+            print(f"Connexion de {client_address}")  # Afficher l'adresse du client connecté
+            data = client_socket.recv(1024)  # Recevoir des données
+            if data:
+                print(f"Message reçu : {data.decode('utf-8')}")  # Afficher le message reçu
+                client_socket.sendall(b"Code reçu avec succès")  # Répondre au client
